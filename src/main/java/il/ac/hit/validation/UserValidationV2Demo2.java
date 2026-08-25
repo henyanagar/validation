@@ -491,8 +491,8 @@ public class UserValidationV2Demo2 {
         );
 
         check(
-                "username spaces ignored by trim",
-                false,
+                "username spaces should not be ignored, length 11",
+                true,
                 UserValidation.usernameLengthBiggerThan8()
                         .apply(spacesAroundShortUsername)
                         .isValid()
