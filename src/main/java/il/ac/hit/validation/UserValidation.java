@@ -167,7 +167,9 @@ public interface UserValidation extends Function<User, ValidationResult> {
     }
 
     /**
-     * Checks that the password contains letters and numbers only.
+     * Checks that the password contains letters and/or numbers only,
+     * with no other characters allowed. A password made up of only
+     * letters, or only numbers, is considered valid by this rule.
      *
      * @return the validation rule
      */
@@ -175,7 +177,7 @@ public interface UserValidation extends Function<User, ValidationResult> {
         return user -> {
             String password = user.getPassword();
 
-            if (password != null && password.matches("(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+")) {
+            if (password != null && password.matches("[a-zA-Z0-9]+")) {
                 return new Valid();
             }
 

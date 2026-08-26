@@ -53,6 +53,8 @@ public class UserValidationTest {
 
 
         // 4. passwordIncludesLettersNumbersOnly
+        // Per lecturer clarification (forum, Aug 26 2026): "letters OR numbers" -
+        // a password made of only letters or only numbers is VALID.
         User user7 = new User("username1", "user@test.co.il", "abc123", 25);
         User user8 = new User("username1", "user@test.co.il", "abcdef", 25);
         User user9 = new User("username1", "user@test.co.il", "123456", 25);
@@ -60,9 +62,9 @@ public class UserValidationTest {
 
         check("passwordIncludesLettersNumbersOnly - letters and numbers", true,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(user7).isValid());
-        check("passwordIncludesLettersNumbersOnly - letters only", false,
+        check("passwordIncludesLettersNumbersOnly - letters only", true,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(user8).isValid());
-        check("passwordIncludesLettersNumbersOnly - numbers only", false,
+        check("passwordIncludesLettersNumbersOnly - numbers only", true,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(user9).isValid());
         check("passwordIncludesLettersNumbersOnly - contains dollar", false,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(user10).isValid());
@@ -111,7 +113,7 @@ public class UserValidationTest {
         System.out.println("\n--- USERNAME / EMAIL WHITESPACE EDGE CASE TESTS ---");
 
         // Username with trailing space: literal length is 9 (greater than 8),
-        // but if trim() is applied internally, it becomes 8 (not greater than 8)
+        // and since trim() was removed, spaces are counted as-is
         User usernameWithTrailingSpace = new User("username ", "user@test.co.il", "pass1234", 25);
         check("usernameLengthBiggerThan8 - trailing space, literal length 9", true,
                 UserValidation.usernameLengthBiggerThan8().apply(usernameWithTrailingSpace).isValid());
@@ -125,6 +127,12 @@ public class UserValidationTest {
         User usernameAllSpaces = new User("         ", "user@test.co.il", "pass1234", 25);
         check("usernameLengthBiggerThan8 - all spaces (9 chars)", true,
                 UserValidation.usernameLengthBiggerThan8().apply(usernameAllSpaces).isValid());
+
+        // Username with spaces around a short core word - spaces are counted,
+        // not trimmed, so the literal length decides the outcome (11 chars > 8)
+        User spacesAroundShortUsername = new User("   admin   ", "user@test.co.il", "abc123456", 25);
+        check("username spaces should not be ignored, length 11", true,
+                UserValidation.usernameLengthBiggerThan8().apply(spacesAroundShortUsername).isValid());
 
         // Email with trailing space before "il" - tests exact ends-with behavior
         User emailWithTrailingSpace = new User("someuser1", "user@test.co.il ", "pass1234", 25);
@@ -144,7 +152,7 @@ public class UserValidationTest {
 
         System.out.println("\n--- PASSWORD WHITESPACE EDGE CASE TESTS ---");
 
-        // Password with trailing space: literal length is 9, same trim() risk as username
+        // Password with trailing space: literal length is 9, spaces are counted as-is
         User passwordTrailingSpace = new User("someuser3", "user@test.co.il", "pass1234 ", 25);
         check("passwordLengthBiggerThan8 - trailing space, literal length 9", true,
                 UserValidation.passwordLengthBiggerThan8().apply(passwordTrailingSpace).isValid());
@@ -165,7 +173,7 @@ public class UserValidationTest {
         check("passwordIncludesLettersNumbersOnly - trailing space must fail", false,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(passwordLettersNumbersTrailingSpace).isValid());
 
-        // Password that is only spaces - must fail (no letters, no digits)
+        // Password that is only spaces - must fail (no letters, no digits at all)
         User passwordAllSpaces = new User("someuser7", "user@test.co.il", "        ", 25);
         check("passwordIncludesLettersNumbersOnly - only spaces must fail", false,
                 UserValidation.passwordIncludesLettersNumbersOnly().apply(passwordAllSpaces).isValid());
