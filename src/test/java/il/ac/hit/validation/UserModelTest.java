@@ -64,8 +64,10 @@ public class UserModelTest {
 
         UserUtils.sort(users, Comparator.comparing(User::getUsername));
 
-        check("UserUtils - sort by username, first is alice", true, users[0].getUsername().equals("alice"));
-        check("UserUtils - sort by username, last is charlie", true, users[2].getUsername().equals("charlie"));
+        check("UserUtils - sort by username, first is alice", true,
+                users[0].getUsername().equals("alice"));
+        check("UserUtils - sort by username, last is charlie", true,
+                users[2].getUsername().equals("charlie"));
 
         UserUtils.sort(users, Comparator.comparingInt(User::getAge));
 

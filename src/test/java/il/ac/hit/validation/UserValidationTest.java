@@ -114,84 +114,112 @@ public class UserValidationTest {
 
         // Username with trailing space: literal length is 9 (greater than 8),
         // and since trim() was removed, spaces are counted as-is
-        User usernameWithTrailingSpace = new User("username ", "user@test.co.il", "pass1234", 25);
-        check("usernameLengthBiggerThan8 - trailing space, literal length 9", true,
-                UserValidation.usernameLengthBiggerThan8().apply(usernameWithTrailingSpace).isValid());
+        User usernameWithTrailingSpace =
+                new User("username ", "user@test.co.il", "pass1234", 25);
+        check("usernameLengthBiggerThan8 - trailing space, length 9", true,
+                UserValidation.usernameLengthBiggerThan8()
+                        .apply(usernameWithTrailingSpace).isValid());
 
         // Username with leading space: same idea, literal length 9
-        User usernameWithLeadingSpace = new User(" username", "user@test.co.il", "pass1234", 25);
-        check("usernameLengthBiggerThan8 - leading space, literal length 9", true,
-                UserValidation.usernameLengthBiggerThan8().apply(usernameWithLeadingSpace).isValid());
+        User usernameWithLeadingSpace =
+                new User(" username", "user@test.co.il", "pass1234", 25);
+        check("usernameLengthBiggerThan8 - leading space, length 9", true,
+                UserValidation.usernameLengthBiggerThan8()
+                        .apply(usernameWithLeadingSpace).isValid());
 
-        // Username that is only spaces - literal length is nonzero, but semantically empty
-        User usernameAllSpaces = new User("         ", "user@test.co.il", "pass1234", 25);
+        // Username that is only spaces - length is nonzero, but semantically empty
+        User usernameAllSpaces =
+                new User("         ", "user@test.co.il", "pass1234", 25);
         check("usernameLengthBiggerThan8 - all spaces (9 chars)", true,
-                UserValidation.usernameLengthBiggerThan8().apply(usernameAllSpaces).isValid());
+                UserValidation.usernameLengthBiggerThan8()
+                        .apply(usernameAllSpaces).isValid());
 
         // Username with spaces around a short core word - spaces are counted,
         // not trimmed, so the literal length decides the outcome (11 chars > 8)
-        User spacesAroundShortUsername = new User("   admin   ", "user@test.co.il", "abc123456", 25);
+        User spacesAroundShortUsername =
+                new User("   admin   ", "user@test.co.il", "abc123456", 25);
         check("username spaces should not be ignored, length 11", true,
-                UserValidation.usernameLengthBiggerThan8().apply(spacesAroundShortUsername).isValid());
+                UserValidation.usernameLengthBiggerThan8()
+                        .apply(spacesAroundShortUsername).isValid());
 
         // Email with trailing space before "il" - tests exact ends-with behavior
-        User emailWithTrailingSpace = new User("someuser1", "user@test.co.il ", "pass1234", 25);
-        check("emailEndsWithIL - trailing space after il should fail literal endsWith", false,
-                UserValidation.emailEndsWithIL().apply(emailWithTrailingSpace).isValid());
+        User emailWithTrailingSpace =
+                new User("someuser1", "user@test.co.il ", "pass1234", 25);
+        check("emailEndsWithIL - trailing space after il must fail", false,
+                UserValidation.emailEndsWithIL()
+                        .apply(emailWithTrailingSpace).isValid());
 
         // Email with internal space (unusual but technically a String)
-        User emailWithInternalSpace = new User("someuser2", "user @test.co.il", "pass1234", 25);
-        check("emailLengthBiggerThan10 - counts internal space in length", true,
-                UserValidation.emailLengthBiggerThan10().apply(emailWithInternalSpace).isValid());
+        User emailWithInternalSpace =
+                new User("someuser2", "user @test.co.il", "pass1234", 25);
+        check("emailLengthBiggerThan10 - counts internal space", true,
+                UserValidation.emailLengthBiggerThan10()
+                        .apply(emailWithInternalSpace).isValid());
 
         // Boundary check without any whitespace complication, for comparison
-        User exactBoundaryUsername = new User("username9", "user@test.co.il", "pass1234", 25); // length 9
-        check("usernameLengthBiggerThan8 - no whitespace, length 9 (control case)", true,
-                UserValidation.usernameLengthBiggerThan8().apply(exactBoundaryUsername).isValid());
+        User exactBoundaryUsername =
+                new User("username9", "user@test.co.il", "pass1234", 25);
+        check("usernameLengthBiggerThan8 - no whitespace, length 9", true,
+                UserValidation.usernameLengthBiggerThan8()
+                        .apply(exactBoundaryUsername).isValid());
 
 
         System.out.println("\n--- PASSWORD WHITESPACE EDGE CASE TESTS ---");
 
         // Password with trailing space: literal length is 9, spaces are counted as-is
-        User passwordTrailingSpace = new User("someuser3", "user@test.co.il", "pass1234 ", 25);
-        check("passwordLengthBiggerThan8 - trailing space, literal length 9", true,
-                UserValidation.passwordLengthBiggerThan8().apply(passwordTrailingSpace).isValid());
+        User passwordTrailingSpace =
+                new User("someuser3", "user@test.co.il", "pass1234 ", 25);
+        check("passwordLengthBiggerThan8 - trailing space, length 9", true,
+                UserValidation.passwordLengthBiggerThan8()
+                        .apply(passwordTrailingSpace).isValid());
 
         // Password with leading space
-        User passwordLeadingSpace = new User("someuser4", "user@test.co.il", " pass1234", 25);
-        check("passwordLengthBiggerThan8 - leading space, literal length 9", true,
-                UserValidation.passwordLengthBiggerThan8().apply(passwordLeadingSpace).isValid());
+        User passwordLeadingSpace =
+                new User("someuser4", "user@test.co.il", " pass1234", 25);
+        check("passwordLengthBiggerThan8 - leading space, length 9", true,
+                UserValidation.passwordLengthBiggerThan8()
+                        .apply(passwordLeadingSpace).isValid());
 
-        // Password containing a space in the middle of letters+numbers - MUST be invalid,
-        // because a space is neither a letter nor a digit
-        User passwordWithInternalSpace = new User("someuser5", "user@test.co.il", "abc 123", 25);
-        check("passwordIncludesLettersNumbersOnly - space in middle must fail", false,
-                UserValidation.passwordIncludesLettersNumbersOnly().apply(passwordWithInternalSpace).isValid());
+        // Password containing a space in the middle of letters+numbers -
+        // MUST be invalid, because a space is neither a letter nor a digit
+        User passwordWithInternalSpace =
+                new User("someuser5", "user@test.co.il", "abc 123", 25);
+        check("passwordIncludesLettersNumbersOnly - space in middle fails", false,
+                UserValidation.passwordIncludesLettersNumbersOnly()
+                        .apply(passwordWithInternalSpace).isValid());
 
-        // Password that is letters+numbers but with a trailing space - must also fail
-        User passwordLettersNumbersTrailingSpace = new User("someuser6", "user@test.co.il", "abc123 ", 25);
-        check("passwordIncludesLettersNumbersOnly - trailing space must fail", false,
-                UserValidation.passwordIncludesLettersNumbersOnly().apply(passwordLettersNumbersTrailingSpace).isValid());
+        // Password that is letters+numbers but with a trailing space - must fail
+        User passwordLettersNumbersTrailingSpace =
+                new User("someuser6", "user@test.co.il", "abc123 ", 25);
+        check("passwordIncludesLettersNumbersOnly - trailing space fails", false,
+                UserValidation.passwordIncludesLettersNumbersOnly()
+                        .apply(passwordLettersNumbersTrailingSpace).isValid());
 
         // Password that is only spaces - must fail (no letters, no digits at all)
-        User passwordAllSpaces = new User("someuser7", "user@test.co.il", "        ", 25);
-        check("passwordIncludesLettersNumbersOnly - only spaces must fail", false,
-                UserValidation.passwordIncludesLettersNumbersOnly().apply(passwordAllSpaces).isValid());
+        User passwordAllSpaces =
+                new User("someuser7", "user@test.co.il", "        ", 25);
+        check("passwordIncludesLettersNumbersOnly - only spaces fails", false,
+                UserValidation.passwordIncludesLettersNumbersOnly()
+                        .apply(passwordAllSpaces).isValid());
 
 
         System.out.println("\n--- passwordIsDifferentFromUsername WHITESPACE TESTS ---");
 
         // Username and password differ only by a trailing space - are they "different"?
         // Literal String equality says yes (they ARE different strings), so this should be valid.
-        User usernamePasswordTrailingDiff = new User("admin", "user@test.co.il", "admin ", 25);
-        check("passwordIsDifferentFromUsername - differs only by trailing space, literal strings differ", true,
-                UserValidation.passwordIsDifferentFromUsername().apply(usernamePasswordTrailingDiff).isValid());
+        User usernamePasswordTrailingDiff =
+                new User("admin", "user@test.co.il", "admin ", 25);
+        check("passwordIsDifferentFromUsername - trailing space, differ", true,
+                UserValidation.passwordIsDifferentFromUsername()
+                        .apply(usernamePasswordTrailingDiff).isValid());
 
         // Username and password are identical, both with the same trailing space -
         // still equal as strings, so this must be invalid
-        User usernamePasswordSameWithSpace = new User("admin ", "user@test.co.il", "admin ", 25);
-        check("passwordIsDifferentFromUsername - identical including matching trailing space, must be invalid", false,
-                UserValidation.passwordIsDifferentFromUsername().apply(usernamePasswordSameWithSpace).isValid());
+        User usernamePasswordSameWithSpace =
+                new User("admin ", "user@test.co.il", "admin ", 25);
+        check("passwordIsDifferentFromUsername - identical, must be invalid", false,
+                UserValidation.passwordIsDifferentFromUsername()
+                        .apply(usernamePasswordSameWithSpace).isValid());
 
 
         System.out.println("\n--- COMBINATOR TESTS ---");
@@ -302,6 +330,7 @@ public class UserValidationTest {
 
         ValidationResult invalidWithoutReason = new Invalid();
         check("Invalid without reason - is invalid", false, invalidWithoutReason.isValid());
-        check("Invalid without reason - reason is empty", true, invalidWithoutReason.getReason().isEmpty());
+        check("Invalid without reason - reason is empty", true,
+                invalidWithoutReason.getReason().isEmpty());
     }
 }

@@ -122,7 +122,7 @@ public interface UserValidation extends Function<User, ValidationResult> {
     }
 
     /**
-     * Checks that the email ends with "il".
+     * Checks that the email ends with "il" (lowercase, exact match).
      *
      * @return the validation rule
      */
@@ -139,6 +139,8 @@ public interface UserValidation extends Function<User, ValidationResult> {
     /**
      * Checks that the email is longer than 10 characters.
      *
+     * <p>No instruction says to ignore spaces, so they count normally.
+     *
      * @return the validation rule
      */
     static UserValidation emailLengthBiggerThan10() {
@@ -153,6 +155,10 @@ public interface UserValidation extends Function<User, ValidationResult> {
 
     /**
      * Checks that the password is longer than 8 characters.
+     *
+     * <p>The length is counted literally with {@code String.length()},
+     * with no trimming. Leading, trailing, or internal spaces are
+     * counted as regular characters.
      *
      * @return the validation rule
      */
@@ -203,6 +209,10 @@ public interface UserValidation extends Function<User, ValidationResult> {
     /**
      * Checks that the password is different from the username.
      *
+     * <p>Comparison uses {@code String.equals()}, so two values that
+     * differ only by a leading or trailing space are still considered
+     * different.
+     *
      * @return the validation rule
      */
     static UserValidation passwordIsDifferentFromUsername() {
@@ -232,6 +242,8 @@ public interface UserValidation extends Function<User, ValidationResult> {
 
     /**
      * Checks that the username is longer than 8 characters.
+     *
+     * <p>No instruction says to ignore spaces, so they count normally.
      *
      * @return the validation rule
      */
