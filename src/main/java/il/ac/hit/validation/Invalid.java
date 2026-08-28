@@ -26,13 +26,34 @@ public class Invalid implements ValidationResult {
         this(null);
     }
 
+    /**
+     * Indicates that the validation failed.
+     *
+     * @return false
+     */
     @Override
     public boolean isValid() {
         return false;
     }
 
+    /**
+     * Returns the reason why the validation failed.
+     *
+     * @return an Optional containing the reason, or an empty Optional
+     * if no reason was provided
+     */
     @Override
     public Optional<String> getReason() {
         return Optional.ofNullable(reason);
+    }
+
+    /**
+     * Returns a string representation of this validation result.
+     *
+     * @return a string representing an invalid result and its reason
+     */
+    @Override
+    public String toString() {
+        return "Invalid{reason='" + reason + "'}";
     }
 }

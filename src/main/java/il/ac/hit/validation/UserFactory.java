@@ -23,18 +23,11 @@ public class UserFactory implements IUserFactory {
             throw new IllegalArgumentException("type cannot be null");
         }
 
-        if (type.equals("basic")) {
-            return new BasicUser(username, email, password, age);
-        }
-
-        if (type.equals("premium")) {
-            return new PremiumUser(username, email, password, age);
-        }
-
-        if (type.equals("platinum")) {
-            return new PlatinumUser(username, email, password, age);
-        }
-
-        throw new IllegalArgumentException("Unknown user type: " + type);
+        return switch (type) {
+            case "basic" -> new BasicUser(username, email, password, age);
+            case "premium" -> new PremiumUser(username, email, password, age);
+            case "platinum" -> new PlatinumUser(username, email, password, age);
+            default -> throw new IllegalArgumentException("Unknown user type: " + type);
+        };
     }
 }
