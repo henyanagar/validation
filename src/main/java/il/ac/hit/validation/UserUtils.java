@@ -8,7 +8,11 @@ import java.util.Comparator;
  * method here is our Template Method implementation, since the
  * comparator supplies the actual comparison logic.
  */
-public class UserUtils {
+public final class UserUtils {
+
+    private UserUtils() {
+        // utility class - not meant to be instantiated
+    }
 
     /**
      * Sorts an array of users in place, using the given comparator

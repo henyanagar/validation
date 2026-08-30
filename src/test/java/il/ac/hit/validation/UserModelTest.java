@@ -35,11 +35,9 @@ public class UserModelTest {
 
         System.out.println("\n--- USER FACTORY TESTS ---");
 
-        UserFactory factory = new UserFactory();
-
-        User basic = factory.createUser("basic", "u1", "u1@gmail.com", "pass1234", 20);
-        User premium = factory.createUser("premium", "u2", "u2@gmail.com", "pass1234", 22);
-        User platinum = factory.createUser("platinum", "u3", "u3@gmail.com", "pass1234", 24);
+        User basic = UserFactory.createUser("basic", "u1", "u1@gmail.com", "pass1234", 20);
+        User premium = UserFactory.createUser("premium", "u2", "u2@gmail.com", "pass1234", 22);
+        User platinum = UserFactory.createUser("platinum", "u3", "u3@gmail.com", "pass1234", 24);
 
         check("Factory - basic type", true, basic instanceof BasicUser);
         check("Factory - premium type", true, premium instanceof PremiumUser);
@@ -47,7 +45,7 @@ public class UserModelTest {
 
         boolean unknownTypeThrew = false;
         try {
-            factory.createUser("gold", "u4", "u4@gmail.com", "pass1234", 26);
+            UserFactory.createUser("gold", "u4", "u4@gmail.com", "pass1234", 26);
         } catch (IllegalArgumentException e) {
             unknownTypeThrew = true;
         }
