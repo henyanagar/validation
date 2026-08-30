@@ -87,6 +87,10 @@ public class User {
         this.age = age;
     }
 
+    /**
+     * @return a string representation of this user, including the
+     * username, email, and age (the password is intentionally omitted)
+     */
     @Override
     public String toString() {
         return "User{username='" + username +
