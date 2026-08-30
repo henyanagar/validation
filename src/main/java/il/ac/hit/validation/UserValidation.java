@@ -73,11 +73,18 @@ public interface UserValidation extends Function<User, ValidationResult> {
             ValidationResult firstResult = this.apply(user);
             ValidationResult secondResult = other.apply(user);
 
-            if (firstResult.isValid() ^ secondResult.isValid()) {
-                return firstResult.isValid() ? firstResult : secondResult;
+            boolean firstValid = firstResult.isValid();
+            boolean secondValid = secondResult.isValid();
+
+            if (firstValid ^ secondValid) {
+                return firstValid ? firstResult : secondResult;
             }
 
-            return new Invalid("Exactly one condition must be valid");
+            if (firstValid) {
+                return new Invalid("Both conditions were valid, but XOR requires exactly one");
+            }
+
+            return new Invalid("Neither condition was valid, but XOR requires exactly one");
         };
     }
 
